@@ -5,7 +5,8 @@ import { getBase64FromDataURL, getMediaTypeFromDataURL } from "@/lib/utils"
 
 const buildBasePrompt = (
   prompt: string,
-  profileContext: string,
+  profile: Tables<"profiles">,
+  // profileContext: string,
   workspaceInstructions: string,
   assistant: Tables<"assistants"> | null
 ) => {
@@ -17,8 +18,21 @@ const buildBasePrompt = (
 
   fullPrompt += `Today is ${new Date().toLocaleDateString()}.\n\n`
 
-  if (profileContext) {
-    fullPrompt += `User Info:\n${profileContext}\n\n`
+  // if (profileContext) {
+  //   fullPrompt += `User Info:\n${profileContext}\n\n`
+  // }
+
+  if (profile) {
+    fullPrompt += `User Info:
+- Name: ${profile.display_name || ""}
+- Location: ${profile.user_location || ""}
+- User Type: ${profile.user_type || ""}
+- Sentiment (from VADER): ${profile.user_sentiment || ""}
+- Inferred Goal: ${profile.inferred_goal || ""}
+- Preferred Tone: ${profile.preferred_tone || ""}
+- Past Reports: ${profile.past_reports ? JSON.stringify(profile.past_reports) : ""}
+${profile.profile_context ? `- Context: ${profile.profile_context}` : ""}
+\n\n`
   }
 
   if (workspaceInstructions) {
@@ -46,10 +60,17 @@ export async function buildFinalMessages(
 
   const BUILT_PROMPT = buildBasePrompt(
     chatSettings.prompt,
-    chatSettings.includeProfileContext ? profile.profile_context || "" : "",
+    profile, // Pass the profile object here
     chatSettings.includeWorkspaceInstructions ? workspaceInstructions : "",
     assistant
   )
+
+  //const BUILT_PROMPT = buildBasePrompt(
+  // chatSettings.prompt,
+  //  chatSettings.includeProfileContext ? profile.profile_context || "" : "",
+  //  chatSettings.includeWorkspaceInstructions ? workspaceInstructions : "",
+  //  assistant
+  // )
 
   const CHUNK_SIZE = chatSettings.contextLength
   const PROMPT_TOKENS = encode(chatSettings.prompt).length

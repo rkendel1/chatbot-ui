@@ -989,6 +989,13 @@ export type Database = {
           use_azure_openai: boolean
           user_id: string
           username: string
+          user_city: string | null
+          user_location: string | null
+          user_type: string | null
+          user_sentiment: string | null
+          inferred_goal: string | null
+          preferred_tone: string | null
+          past_reports: any | null
         }
         Insert: {
           anthropic_api_key?: string | null
@@ -1017,6 +1024,13 @@ export type Database = {
           use_azure_openai: boolean
           user_id: string
           username: string
+          user_city?: string | null
+          user_location?: string | null
+          user_type?: string | null
+          user_sentiment?: string | null
+          inferred_goal?: string | null
+          preferred_tone?: string | null
+          past_reports?: any | null
         }
         Update: {
           anthropic_api_key?: string | null
@@ -1045,6 +1059,13 @@ export type Database = {
           use_azure_openai?: boolean
           user_id?: string
           username?: string
+          user_city?: string | null
+          user_location?: string | null
+          user_type?: string | null
+          user_sentiment?: string | null
+          inferred_goal?: string | null
+          preferred_tone?: string | null
+          past_reports?: any | null
         }
         Relationships: []
       }
